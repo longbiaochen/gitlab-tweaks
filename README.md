@@ -1,48 +1,42 @@
 # GitLab Tweaks
 
-`GitLab Tweaks` is a Tampermonkey userscript that adds a few focused quality-of-life improvements to GitLab pages, especially issue-board workflows.
+`GitLab Tweaks` is a small Tampermonkey userscript for GitLab issue boards and project pages.
 
-This repo is a cleaned-up, modernized version of an older personal userscript. The original Tampermonkey copy was partially recovered from local storage and refactored into a small source-based project so it is easier to maintain and share.
+It is a cleaned-up rewrite of an older personal userscript recovered from Tampermonkey storage and rebuilt as a maintainable source project.
 
-## Current tweaks
+## Features
 
-- Project dashboard shortcut:
-  Clicking the groups/projects dropdown redirects to `/dashboard/projects?sort=name_asc` so project lists open in a predictable order.
-- Board header link normalization:
-  Board and issue-list title links are rewritten to a consistent issues URL so the header behaves like a useful navigation shortcut.
-- Contextual sidebar auto-collapse:
-  Right sidebars that consume horizontal space are collapsed automatically on matching GitLab pages.
+- Redirect the projects dropdown to `/dashboard/projects?sort=name_asc`.
+- Rewrite board and issue header links to stable `/-/issues?key=1` URLs.
+- Collapse contextual right sidebars that waste horizontal space.
 
 ## Install
 
-1. Build the userscript:
+Install the latest build directly from GitHub raw:
+
+[gitlab-tweaks.user.js](https://raw.githubusercontent.com/longbiaochen/gitlab-tweaks/main/dist/gitlab-tweaks.user.js)
+
+Or build it locally:
 
 ```bash
+npm install
 npm run build
 ```
 
-2. Import `dist/gitlab-tweaks.user.js` into Tampermonkey.
-
-If you publish this repo on GitHub, users can also install directly from the raw `.user.js` URL.
+Then import `dist/gitlab-tweaks.user.js` into Tampermonkey.
 
 ## Development
 
-Source lives in `src/gitlab-tweaks.js`.
+Source: `src/gitlab-tweaks.js`
 
-Build output:
-
-- `dist/gitlab-tweaks.user.js`
-
-Build command:
+Build:
 
 ```bash
 npm run build
 ```
 
-## Compatibility
+The metadata intentionally uses broad URL matching and then runtime-detects GitLab, so the script works on self-hosted instances without per-domain edits.
 
-The installable userscript uses broad URL matching and then runtime-detects whether the current page is GitLab. This keeps it usable on self-hosted GitLab instances without requiring users to edit metadata for every domain.
+## Notes
 
-## Legacy note
-
-The original script contained more ad hoc DOM logic tied to a specific GitLab deployment. Only the clearly recoverable and still-useful behaviors were preserved here. Additional tweaks can be reintroduced cleanly as small feature modules.
+The original script had deployment-specific DOM hacks and a jQuery dependency. This repo keeps only the recoverable behavior that still makes sense and implements it in plain DOM code with batched mutation handling.

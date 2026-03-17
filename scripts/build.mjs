@@ -4,13 +4,15 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
+const packagePath = resolve(root, "package.json");
 const srcPath = resolve(root, "src/gitlab-tweaks.js");
 const outPath = resolve(root, "dist/gitlab-tweaks.user.js");
+const pkg = JSON.parse(await readFile(packagePath, "utf8"));
 
 const banner = `// ==UserScript==
 // @name         GitLab Tweaks
 // @namespace    http://tampermonkey.net/
-// @version      1.8.0
+// @version      ${pkg.version}
 // @description  Quality-of-life tweaks for GitLab issue boards and project pages.
 // @author       Longbiao CHEN
 // @license      GPL-3.0-only

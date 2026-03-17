@@ -2,10 +2,8 @@
   "use strict";
 
   const PROJECT_DASHBOARD_PATH = "/dashboard/projects?sort=name_asc";
-  const STATE = {
-    navBound: false,
-    observer: null
-  };
+  const pendingRoots = new Set();
+  let flushScheduled = false;
 
   function isElement(value) {
     return value instanceof HTMLElement;
@@ -124,18 +122,42 @@
     collapseSidebar();
   }
 
+  function flushTweaks() {
+    flushScheduled = false;
+
+    if (pendingRoots.size === 0) {
+      applyTweaks(document);
+      return;
+    }
+
+    for (const root of pendingRoots) {
+      applyTweaks(root);
+    }
+    pendingRoots.clear();
+  }
+
+  function scheduleTweaks(root = document) {
+    pendingRoots.add(root);
+    if (flushScheduled) {
+      return;
+    }
+
+    flushScheduled = true;
+    window.requestAnimationFrame(flushTweaks);
+  }
+
   function start() {
     if (!isGitLabPage()) {
       return;
     }
 
-    applyTweaks(document);
+    scheduleTweaks(document);
 
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
           if (node instanceof HTMLElement) {
-            applyTweaks(node);
+            scheduleTweaks(node);
           }
         }
       }
@@ -145,8 +167,6 @@
       childList: true,
       subtree: true
     });
-
-    STATE.observer = observer;
   }
 
   if (document.readyState === "loading") {

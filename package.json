@@ -1,6 +1,6 @@
 {
   "name": "gitlab-tweaks",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "private": false,
   "description": "A Tampermonkey userscript with quality-of-life tweaks for GitLab issue boards and project pages.",
   "license": "GPL-3.0-only",
